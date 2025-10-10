@@ -33,7 +33,7 @@ function autoclick(timestamp: number) {
   lastFrameTimeMs = timestamp;
   timeAccumulator += delta;
 
-	while (timeAccumulator >= autoclickDelay) {
+  while (timeAccumulator >= autoclickDelay) {
     counter += autoclickIncrement;
     counterElement.innerHTML = String(counter);
 
