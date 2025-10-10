@@ -3,23 +3,34 @@ import "./style.css";
 document.body.innerHTML = `
   <h1>CMPM 121 Demo 1</h1>
   <button id="increment">⭐</button>
-  <div>You have <span id="counter">0</span> stars!</div>
+  <div>You've discovered <span id="counterStars">0</span> stars!</div>
+  <button id="upgradeOne">Buy telescope</button>
+  <div>Number of telescopes: <span id="counterTelescopes">0</span></div>
 `;
 
-let counter: number = 0;
+let counterStars: number = 0;
+let counterTelescopes: number = 0;
 // deno-lint-ignore prefer-const
 let autoclickDelay: number = 1000;
 // deno-lint-ignore prefer-const
 let autoclickIncrement: number = 1;
 
-// BUTTON
+// BUTTONS
 
-const button = document.getElementById("increment")!;
-const counterElement = document.getElementById("counter")!;
+const buttonStars = document.getElementById("increment")!;
+const counterElemStars = document.getElementById("counterStars")!;
+const buttonTelescopes = document.getElementById("upgradeOne")!;
+const counterElemTelescopes = document.getElementById("couterTelescopes")!;
 
 // Click Listener for Button
-button.addEventListener("click", () => {
-  counterElement.textContent = String(++counter);
+buttonStars.addEventListener("click", () => {
+  counterElemStars.textContent = String(++counterStars);
+});
+
+buttonTelescopes.addEventListener("click", () => {
+  if (counterStars >= 10) {
+    counterElemTelescopes.textContent = String(++counterTelescopes);
+  }
 });
 
 // AUTOCLICKER
@@ -34,8 +45,8 @@ function autoclick(timestamp: number) {
   timeAccumulator += delta;
 
   while (timeAccumulator >= autoclickDelay) {
-    counter += autoclickIncrement;
-    counterElement.innerHTML = String(counter);
+    counterStars += autoclickIncrement;
+    counterElemStars.textContent = String(counterStars);
 
     timeAccumulator -= autoclickDelay;
   }
