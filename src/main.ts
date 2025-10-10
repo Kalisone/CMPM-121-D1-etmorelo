@@ -12,6 +12,8 @@ let autoclickDelay: number = 1000;
 // deno-lint-ignore prefer-const
 let autoclickIncrement: number = 1;
 
+// BUTTON
+
 const button = document.getElementById("increment")!;
 const counterElement = document.getElementById("counter")!;
 
@@ -20,8 +22,25 @@ button.addEventListener("click", () => {
   counterElement.textContent = String(++counter);
 });
 
-// "Autoclicker" Counter increments by (1) star(s) every (1) second(s)
-setInterval(() => {
-  counter += autoclickIncrement;
-  counterElement.innerHTML = String(counter);
-}, autoclickDelay);
+// AUTOCLICKER
+
+let lastFrameTimeMs: number = 0;
+let timeAccumulator: number = 0;
+
+// Autoclicker increments counter by (1) star(s)
+function autoclick(timestamp: number) {
+  const delta = timestamp - lastFrameTimeMs;
+  lastFrameTimeMs = timestamp;
+  timeAccumulator += delta;
+
+	while (timeAccumulator >= autoclickDelay) {
+    counter += autoclickIncrement;
+    counterElement.innerHTML = String(counter);
+
+    timeAccumulator -= autoclickDelay;
+  }
+
+  requestAnimationFrame(autoclick);
+}
+
+requestAnimationFrame(autoclick);
