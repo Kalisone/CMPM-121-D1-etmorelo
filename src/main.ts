@@ -2,14 +2,17 @@ import "./style.css";
 
 document.body.innerHTML = `
   <h1>CMPM 121 Demo 1</h1>
-  <button id="increment">⭐</button>
-  <div>You've discovered <span id="counterStars">0</span> stars!</div>
-  <button id="upgradeOne">Buy telescope</button>
-  <div>Number of telescopes: <span id="counterTelescopes">0</span></div>
+  <button id="incrementID">⭐</button>
+  <div>You have <span id="counterStarsID">0</span> stars!</div>
+  <button id="upgradeOneID">Buy telescope: <span id="costTelescopesID">X</span> stars</button>
+  <div>Number of telescopes: <span id="counterTelescopesID">0</span></div>
 `;
 
 let counterStars: number = 0;
 let counterTelescopes: number = 0;
+let costTelescopes: number = 10;
+
+let clickIncrement: number = 1;
 // deno-lint-ignore prefer-const
 let autoclickDelay: number = 1000;
 // deno-lint-ignore prefer-const
@@ -17,18 +20,30 @@ let autoclickIncrement: number = 1;
 
 // BUTTONS
 
-const buttonStars = document.getElementById("increment")!;
-const counterElemStars = document.getElementById("counterStars")!;
-const buttonTelescopes = document.getElementById("upgradeOne")!;
-const counterElemTelescopes = document.getElementById("couterTelescopes")!;
+const buttonStars = document.getElementById("incrementID")!;
+const counterElemStars = document.getElementById("counterStarsID")!;
+const buttonTelescopes = document.getElementById("upgradeOneID")!;
+const costElemTelescopes = document.getElementById("costTelescopesID")!;
+const counterElemTelescopes = document.getElementById("counterTelescopesID")!;
 
-// Click Listener for Button
+costElemTelescopes.textContent = String(costTelescopes);
+
+// Click Listener for Star Button
 buttonStars.addEventListener("click", () => {
-  counterElemStars.textContent = String(++counterStars);
+  counterStars += clickIncrement;
+  counterElemStars.textContent = String(counterStars);
 });
 
+// Click Listener for Telescope Upgrade Button
 buttonTelescopes.addEventListener("click", () => {
-  if (counterStars >= 10) {
+  if (counterStars >= costTelescopes) {
+    clickIncrement++;
+
+    counterStars -= costTelescopes;
+    counterElemStars.textContent = String(counterStars);
+
+    costTelescopes = Math.floor(costTelescopes * 1.5);
+    costElemTelescopes.textContent = String(costTelescopes);
     counterElemTelescopes.textContent = String(++counterTelescopes);
   }
 });
