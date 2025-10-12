@@ -1,23 +1,35 @@
 import "./style.css";
 
 document.body.innerHTML = `
-  <h1>CMPM 121 Demo 1</h1>
+  <h1>Starfinder</h1>
+  <hr>
+
   <button id="incrementID">⭐</button>
+  <br><br>
 
   <div>You have <span id="counterStarsID">0</span> stars!</div>
   <div>Getting <span id="incrementStarsID">1.00</span> stars per second.</div>
-  
+  <br>
+
   <button id="buttonTelescopesID">Buy Telescope: <span id="costTelescopesID">X</span> stars</button>
   <div>Number of Telescopes: <span id="counterTelescopesID">0</span></div>
+  <div>+<span id="incrementTelescopesID">1</span> stars/click</div>
+  <br>
   
   <button id="buttonResearchCentersID">Buy Research Center: <span id="costResearchCentersID">X</span> stars</button>
   <div>Number of Research Centers: <span id="counterResearchCentersID">0</span></div>
+  <div>+<span id="incrementResearchCentersID">X</span> stars/sec</div>
+  <br>
 
   <button id="buttonSpaceStationsID">Buy Space Station: <span id="costSpaceStationsID">X</span> stars</button>
   <div>Number of Space Stations: <span id="counterSpaceStationsID">0</span></div>
+  <div>+<span id="incrementSpaceStationsID">X</span> stars/sec</div>
+  <br>
 
   <button id="buttonWarpPortalsID">Buy Warp Portal: <span id="costWarpPortalsID">X</span> stars</button>
   <div>Number of Warp Portals: <span id="counterWarpPortalsID">0</span></div>
+  <div>+<span id="incrementWarpPortalsID">X</span> stars/sec</div>
+  <br>
 `;
 
 let counterStars: number = 0;
@@ -27,12 +39,15 @@ let costTelescopes: number = 10;
 
 let counterResearchCenters: number = 0;
 let costResearchCenters: number = 10;
+const incrementResearchCenters = 0.1;
 
 let counterSpaceStations: number = 0;
 let costSpaceStations: number = 100;
+const incrementSpaceStations = 2.0;
 
 let counterWarpPortals: number = 0;
 let costWarpPortals: number = 1000;
+const incrementWarpPortals = 50.0;
 
 let clickIncrement: number = 1;
 // deno-lint-ignore prefer-const
@@ -48,6 +63,9 @@ const incrementElemStars = document.getElementById("incrementStarsID")!;
 const buttonTelescopes = document.getElementById("buttonTelescopesID")!;
 const costElemTelescopes = document.getElementById("costTelescopesID")!;
 const counterElemTelescopes = document.getElementById("counterTelescopesID")!;
+const incrementElemTelescopes = document.getElementById(
+  "incrementTelescopesID",
+)!;
 
 const buttonResearchCenters = document.getElementById(
   "buttonResearchCentersID",
@@ -58,21 +76,36 @@ const costElemResearchCenters = document.getElementById(
 const counterElemResearchCenters = document.getElementById(
   "counterResearchCentersID",
 )!;
+const incrementElemResearchCenters = document.getElementById(
+  "incrementResearchCentersID",
+)!;
 
 const buttonSpaceStations = document.getElementById("buttonSpaceStationsID")!;
 const costElemSpaceStations = document.getElementById("costSpaceStationsID")!;
 const counterElemSpaceStations = document.getElementById(
   "counterSpaceStations",
 )!;
+const incrementElemSpaceStations = document.getElementById(
+  "incrementSpaceStationsID",
+)!;
 
 const buttonWarpPortals = document.getElementById("buttonWarpPortalsID")!;
 const costElemWarpPortals = document.getElementById("costWarpPortalsID")!;
 const counterElemWarpPortals = document.getElementById("counterWarpPortalsID")!;
+const incrementElemWarpPortals = document.getElementById(
+  "incrementWarpPortalsID",
+)!;
 
 costElemTelescopes.textContent = String(costTelescopes);
+
 costElemResearchCenters.textContent = String(costResearchCenters);
+incrementElemResearchCenters.textContent = String(incrementResearchCenters);
+
 costElemSpaceStations.textContent = String(costSpaceStations);
+incrementElemSpaceStations.textContent = String(incrementSpaceStations);
+
 costElemWarpPortals.textContent = String(costWarpPortals);
+incrementElemWarpPortals.textContent = String(incrementWarpPortals);
 
 // Click Listener for Star Button
 buttonStars.addEventListener("click", () => {
@@ -83,7 +116,7 @@ buttonStars.addEventListener("click", () => {
 // Click Listener for Telescope Upgrade Button
 buttonTelescopes.addEventListener("click", () => {
   if (counterStars >= costTelescopes) {
-    clickIncrement++;
+    incrementElemTelescopes.textContent = String(++clickIncrement);
 
     counterStars -= costTelescopes;
     counterElemStars.textContent = String(Math.round(counterStars));
@@ -97,7 +130,7 @@ buttonTelescopes.addEventListener("click", () => {
 // Click Listener for Research Center Upgrade Button
 buttonResearchCenters.addEventListener("click", () => {
   if (counterStars >= costResearchCenters) {
-    autoclickIncrement += 0.1;
+    autoclickIncrement += incrementResearchCenters;
 
     counterStars -= costResearchCenters;
     counterElemStars.textContent = String(Math.round(counterStars));
@@ -115,7 +148,7 @@ buttonResearchCenters.addEventListener("click", () => {
 // Click Listener for Space Stations Upgrade Button
 buttonSpaceStations.addEventListener("click", () => {
   if (counterStars >= costSpaceStations) {
-    autoclickIncrement += 2.0;
+    autoclickIncrement += incrementSpaceStations;
 
     counterStars -= costSpaceStations;
     counterElemStars.textContent = String(Math.round(counterStars));
@@ -131,7 +164,7 @@ buttonSpaceStations.addEventListener("click", () => {
 // Click Listener for Warp Portals Upgrade Button
 buttonWarpPortals.addEventListener("click", () => {
   if (counterStars >= costWarpPortals) {
-    autoclickIncrement += 50.0;
+    autoclickIncrement += incrementWarpPortals;
 
     counterStars -= costWarpPortals;
     counterElemStars.textContent = String(Math.round(counterStars));
