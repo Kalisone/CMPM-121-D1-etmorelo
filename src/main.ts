@@ -3,7 +3,9 @@ import "./style.css";
 document.body.innerHTML = `
   <h1>CMPM 121 Demo 1</h1>
   <button id="incrementID">⭐</button>
+
   <div>You have <span id="counterStarsID">0</span> stars!</div>
+  <div>Getting <span id="incrementStarsID">1.00</span> stars per second.</div>
   
   <button id="buttonTelescopesID">Buy Telescope: <span id="costTelescopesID">X</span> stars</button>
   <div>Number of Telescopes: <span id="counterTelescopesID">0</span></div>
@@ -41,6 +43,7 @@ let autoclickIncrement: number = 1;
 
 const buttonStars = document.getElementById("incrementID")!;
 const counterElemStars = document.getElementById("counterStarsID")!;
+const incrementElemStars = document.getElementById("incrementStarsID")!;
 
 const buttonTelescopes = document.getElementById("buttonTelescopesID")!;
 const costElemTelescopes = document.getElementById("costTelescopesID")!;
@@ -154,10 +157,12 @@ function autoclick(timestamp: number) {
 
   while (timeAccumulator >= autoclickDelay) {
     counterStars += autoclickIncrement;
-    counterElemStars.textContent = String(Math.round(counterStars));
 
     timeAccumulator -= autoclickDelay;
   }
+
+  counterElemStars.textContent = String(Math.round(counterStars));
+  incrementElemStars.textContent = autoclickIncrement.toFixed(2);
 
   requestAnimationFrame(autoclick);
 }
