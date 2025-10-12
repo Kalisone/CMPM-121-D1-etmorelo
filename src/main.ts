@@ -83,7 +83,7 @@ const incrementElemResearchCenters = document.getElementById(
 const buttonSpaceStations = document.getElementById("buttonSpaceStationsID")!;
 const costElemSpaceStations = document.getElementById("costSpaceStationsID")!;
 const counterElemSpaceStations = document.getElementById(
-  "counterSpaceStations",
+  "counterSpaceStationsID",
 )!;
 const incrementElemSpaceStations = document.getElementById(
   "incrementSpaceStationsID",
@@ -123,7 +123,7 @@ buttonTelescopes.addEventListener("click", () => {
 
     costTelescopes *= 1.5;
     costElemTelescopes.textContent = String(Math.round(costTelescopes));
-    counterElemTelescopes.textContent = String(Math.round(++counterTelescopes));
+    counterElemTelescopes.textContent = String(++counterTelescopes);
   }
 });
 
@@ -139,9 +139,7 @@ buttonResearchCenters.addEventListener("click", () => {
     costElemResearchCenters.textContent = String(
       Math.round(costResearchCenters),
     );
-    counterElemResearchCenters.textContent = String(
-      Math.round(++counterResearchCenters),
-    );
+    counterElemResearchCenters.textContent = String(++counterResearchCenters);
   }
 });
 
@@ -155,9 +153,7 @@ buttonSpaceStations.addEventListener("click", () => {
 
     costSpaceStations *= 1.2;
     costElemSpaceStations.textContent = String(Math.round(costSpaceStations));
-    counterElemSpaceStations.textContent = String(
-      Math.round(++counterSpaceStations),
-    );
+    counterElemSpaceStations.textContent = String(++counterSpaceStations);
   }
 });
 
@@ -171,9 +167,7 @@ buttonWarpPortals.addEventListener("click", () => {
 
     costWarpPortals *= 1.2;
     costElemWarpPortals.textContent = String(Math.round(costWarpPortals));
-    counterElemWarpPortals.textContent = String(
-      Math.round(++counterWarpPortals),
-    );
+    counterElemWarpPortals.textContent = String(++counterWarpPortals);
   }
 });
 
