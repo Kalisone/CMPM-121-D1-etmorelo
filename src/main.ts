@@ -13,6 +13,9 @@ document.body.innerHTML = `
 
   <button id="buttonSpaceStationsID">Buy Space Station: <span id="costSpaceStationsID">X</span> stars</button>
   <div>Number of Space Stations: <span id="counterSpaceStationsID">0</span></div>
+
+  <button id="buttonWarpPortalsID">Buy Warp Portal: <span id="costWarpPortalsID">X</span> stars</button>
+  <div>Number of Warp Portals: <span id="counterWarpPortalsID">0</span></div>
 `;
 
 let counterStars: number = 0;
@@ -25,6 +28,9 @@ let costResearchCenters: number = 10;
 
 let counterSpaceStations: number = 0;
 let costSpaceStations: number = 100;
+
+let counterWarpPortals: number = 0;
+let costWarpPortals: number = 1000;
 
 let clickIncrement: number = 1;
 // deno-lint-ignore prefer-const
@@ -56,9 +62,14 @@ const counterElemSpaceStations = document.getElementById(
   "counterSpaceStations",
 )!;
 
+const buttonWarpPortals = document.getElementById("buttonWarpPortalsID")!;
+const costElemWarpPortals = document.getElementById("costWarpPortalsID")!;
+const counterElemWarpPortals = document.getElementById("counterWarpPortalsID")!;
+
 costElemTelescopes.textContent = String(costTelescopes);
 costElemResearchCenters.textContent = String(costResearchCenters);
 costElemSpaceStations.textContent = String(costSpaceStations);
+costElemWarpPortals.textContent = String(costWarpPortals);
 
 // Click Listener for Star Button
 buttonStars.addEventListener("click", () => {
@@ -74,7 +85,7 @@ buttonTelescopes.addEventListener("click", () => {
     counterStars -= costTelescopes;
     counterElemStars.textContent = String(Math.round(counterStars));
 
-    costTelescopes = costTelescopes * 1.5;
+    costTelescopes *= 1.5;
     costElemTelescopes.textContent = String(Math.round(costTelescopes));
     counterElemTelescopes.textContent = String(Math.round(++counterTelescopes));
   }
@@ -88,7 +99,7 @@ buttonResearchCenters.addEventListener("click", () => {
     counterStars -= costResearchCenters;
     counterElemStars.textContent = String(Math.round(counterStars));
 
-    costResearchCenters = costResearchCenters * 1.1;
+    costResearchCenters *= 1.1;
     costElemResearchCenters.textContent = String(
       Math.round(costResearchCenters),
     );
@@ -106,10 +117,26 @@ buttonSpaceStations.addEventListener("click", () => {
     counterStars -= costSpaceStations;
     counterElemStars.textContent = String(Math.round(counterStars));
 
-    costSpaceStations = costSpaceStations * 1.2;
+    costSpaceStations *= 1.2;
     costElemSpaceStations.textContent = String(Math.round(costSpaceStations));
     counterElemSpaceStations.textContent = String(
       Math.round(++counterSpaceStations),
+    );
+  }
+});
+
+// Click Listener for Warp Portals Upgrade Button
+buttonWarpPortals.addEventListener("click", () => {
+  if (counterStars >= costWarpPortals) {
+    autoclickIncrement += 50.0;
+
+    counterStars -= costWarpPortals;
+    counterElemStars.textContent = String(Math.round(counterStars));
+
+    costWarpPortals *= 1.2;
+    costElemWarpPortals.textContent = String(Math.round(costWarpPortals));
+    counterElemWarpPortals.textContent = String(
+      Math.round(++counterWarpPortals),
     );
   }
 });
