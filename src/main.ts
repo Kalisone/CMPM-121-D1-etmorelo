@@ -35,38 +35,44 @@ document.body.innerHTML = `
   <br>
 `;
 
-interface Item {
-  name: string;
-  cost: number;
-  rate: number;
-  counter: number;
-  buttonElem: HTMLElement;
-  costElem: HTMLElement;
-  counterElem: HTMLElement;
-  rateElem: HTMLElement;
+class Item {
+  constructor(
+    public name: string,
+    public cost: number,
+    public rate: number,
+    public counter: number,
+    public buttonElem: HTMLElement,
+    public costElem: HTMLElement,
+    public counterElem: HTMLElement,
+    public rateElem: HTMLElement,
+  ) {}
+
+  set setCost(newCost: number) {
+    this.cost = newCost;
+  }
 }
 
 const availableItems: Item[] = [
-  {
-    name: "Research Center",
-    cost: 10,
-    rate: 0.1,
-    counter: 0,
-    buttonElem: document.getElementById("buttonResearchCentersID")!,
-    costElem: document.getElementById("costResearchCentersID")!,
-    counterElem: document.getElementById("counterResearchCentersID")!,
-    rateElem: document.getElementById("incrementResearchCentersID")!,
-  },
-  {
-    name: "Space Station",
-    cost: 100,
-    rate: 2.0,
-    counter: 0,
-    buttonElem: document.getElementById("buttonSpaceStationsID")!,
-    costElem: document.getElementById("costSpaceStationsID")!,
-    counterElem: document.getElementById("counterSpaceStationsID")!,
-    rateElem: document.getElementById("incrementSpaceStationsID")!,
-  },
+  new Item(
+    "Research Center",
+    10,
+    0.1,
+    0,
+    document.getElementById("buttonResearchCentersID")!,
+    document.getElementById("costResearchCentersID")!,
+    document.getElementById("counterResearchCentersID")!,
+    document.getElementById("incrementResearchCentersID")!,
+  ),
+  new Item(
+    "Space Station",
+    100,
+    2.0,
+    0,
+    document.getElementById("buttonSpaceStationsID")!,
+    document.getElementById("costSpaceStationsID")!,
+    document.getElementById("counterSpaceStationsID")!,
+    document.getElementById("incrementSpaceStationsID")!,
+  ),
 ];
 
 /* **** **** **** ****
@@ -218,16 +224,19 @@ buttonSpaceStations.addEventListener("click", () => {
 });
 */
 for (const item of availableItems) {
-  if (counterStars >= item.cost) {
-    autoclickIncrement += item.rate;
+  item.buttonElem.addEventListener("click", () => {
+    if (counterStars >= item.cost) {
+      console.log(item);
+      autoclickIncrement += item.rate;
 
-    counterStars -= item.cost;
-    item.counterElem.textContent = String(counterStars);
+      counterStars -= item.cost;
+      item.counterElem.textContent = String(counterStars);
 
-    item.cost *= 1.2;
-    item.costElem.textContent = String(item.cost);
-    item.counterElem.textContent = String(++item.counter);
-  }
+      item.setCost = item.cost * 1.2;
+      item.costElem.textContent = String(item.cost);
+      item.counterElem.textContent = String(++item.counter);
+    }
+  });
 }
 // Warp Portals Upgrade
 buttonWarpPortals.addEventListener("click", () => {
