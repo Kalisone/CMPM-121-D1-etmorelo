@@ -35,9 +35,13 @@ document.body.innerHTML = `
   <br>
 `;
 
-class Item {
+/* **** **** **** ****
+ * UPGRADES
+ * **** **** **** ****/
+class Upgrade {
   constructor(
     public name: string,
+    public upgradeKind: string,
     public cost: number,
     public rate: number,
     public counter: number,
@@ -52,9 +56,21 @@ class Item {
   }
 }
 
-const availableItems: Item[] = [
-  new Item(
+const availableUpgrades: Upgrade[] = [
+  new Upgrade(
+    "Telescope",
+    "manual",
+    10,
+    1,
+    0,
+    document.getElementById("buttonTelescopesID")!,
+    document.getElementById("costTelescopesID")!,
+    document.getElementById("counterTelescopesID")!,
+    document.getElementById("incrementTelescopesID")!,
+  ),
+  new Upgrade(
     "Research Center",
+    "auto",
     10,
     0.1,
     0,
@@ -63,8 +79,9 @@ const availableItems: Item[] = [
     document.getElementById("counterResearchCentersID")!,
     document.getElementById("incrementResearchCentersID")!,
   ),
-  new Item(
+  new Upgrade(
     "Space Station",
+    "auto",
     100,
     2.0,
     0,
@@ -73,189 +90,74 @@ const availableItems: Item[] = [
     document.getElementById("counterSpaceStationsID")!,
     document.getElementById("incrementSpaceStationsID")!,
   ),
+  new Upgrade(
+    "Warp Portals",
+    "auto",
+    1000,
+    50.0,
+    0,
+    document.getElementById("buttonWarpPortalsID")!,
+    document.getElementById("costWarpPortalsID")!,
+    document.getElementById("counterWarpPortalsID")!,
+    document.getElementById("incrementWarpPortalsID")!,
+  ),
 ];
 
 /* **** **** **** ****
  * VARIABLES
  * **** **** **** ****/
-
 let counterStars: number = 0;
-
-let counterTelescopes: number = 0;
-let costTelescopes: number = 10;
-/*
-let counterResearchCenters: number = 0;
-let costResearchCenters: number = 10;
-const incrementResearchCenters = 0.1;
-
-let counterSpaceStations: number = 0;
-let costSpaceStations: number = 100;
-const incrementSpaceStations = 2.0;
-*/
-let counterWarpPortals: number = 0;
-let costWarpPortals: number = 1000;
-const incrementWarpPortals = 50.0;
-
 let clickIncrement: number = 1;
 // deno-lint-ignore prefer-const
 let autoclickDelay: number = 1000;
 let autoclickIncrement: number = 1;
 
 /* **** **** **** ****
- * BUTTONS
+ * INITIALIZE STAR ELEMENTS
  * **** **** **** ****/
-
-// Stars
 const buttonStars = document.getElementById("incrementID")!;
 const counterElemStars = document.getElementById("counterStarsID")!;
 const incrementElemStars = document.getElementById("incrementStarsID")!;
 
-// Telescopes Upgrade
-const buttonTelescopes = document.getElementById("buttonTelescopesID")!;
-const costElemTelescopes = document.getElementById("costTelescopesID")!;
-const counterElemTelescopes = document.getElementById("counterTelescopesID")!;
-const incrementElemTelescopes = document.getElementById(
-  "incrementTelescopesID",
-)!;
-/*
-// Research Centers Upgrade
-const buttonResearchCenters = document.getElementById(
-  "buttonResearchCentersID",
-)!;
-const costElemResearchCenters = document.getElementById(
-  "costResearchCentersID",
-)!;
-const counterElemResearchCenters = document.getElementById(
-  "counterResearchCentersID",
-)!;
-const incrementElemResearchCenters = document.getElementById(
-  "incrementResearchCentersID",
-)!;
-
-// Space Stations Upgrade
-const buttonSpaceStations = document.getElementById("buttonSpaceStationsID")!;
-const costElemSpaceStations = document.getElementById("costSpaceStationsID")!;
-const counterElemSpaceStations = document.getElementById(
-  "counterSpaceStationsID",
-)!;
-const incrementElemSpaceStations = document.getElementById(
-  "incrementSpaceStationsID",
-)!;
-*/
-// Warp Portals Upgrade
-const buttonWarpPortals = document.getElementById("buttonWarpPortalsID")!;
-const costElemWarpPortals = document.getElementById("costWarpPortalsID")!;
-const counterElemWarpPortals = document.getElementById("counterWarpPortalsID")!;
-const incrementElemWarpPortals = document.getElementById(
-  "incrementWarpPortalsID",
-)!;
-
-/* **** **** **** ****
- * INITIALIZE COSTS OF UPGRADES
- * **** **** **** ****/
-costElemTelescopes.textContent = String(costTelescopes);
-/*
-costElemResearchCenters.textContent = String(costResearchCenters);
-incrementElemResearchCenters.textContent = String(incrementResearchCenters);
-
-costElemSpaceStations.textContent = String(costSpaceStations);
-incrementElemSpaceStations.textContent = String(incrementSpaceStations);
-*/
-costElemWarpPortals.textContent = String(costWarpPortals);
-incrementElemWarpPortals.textContent = String(incrementWarpPortals);
-
-for (const item of availableItems) {
-  item.costElem.textContent = String(item.cost);
-  item.rateElem.textContent = String(item.rate);
-}
-
 /* **** **** **** ****
  * CLICK LISTENERS FOR BUTTONS
  * **** **** **** ****/
-
 // Stars
 buttonStars.addEventListener("click", () => {
   counterStars += clickIncrement;
-  counterElemStars.textContent = String(Math.round(counterStars));
+  counterElemStars.textContent = counterStars.toFixed(2);
 });
 
-// Telescopes Upgrade
-buttonTelescopes.addEventListener("click", () => {
-  if (counterStars >= costTelescopes) {
-    incrementElemTelescopes.textContent = String(++clickIncrement);
+// Upgrades
+for (const upgrade of availableUpgrades) {
+  // Initialize cost of upgrades
+  upgrade.costElem.textContent = String(upgrade.cost);
+  upgrade.rateElem.textContent = String(upgrade.rate);
 
-    counterStars -= costTelescopes;
-    counterElemStars.textContent = String(Math.round(counterStars));
+  // Click listener
+  upgrade.buttonElem.addEventListener("click", () => {
+    if (counterStars >= upgrade.cost) {
+      counterStars -= upgrade.cost;
+      upgrade.counterElem.textContent = counterStars.toFixed(2);
 
-    costTelescopes *= 1.5;
-    costElemTelescopes.textContent = String(Math.round(costTelescopes));
-    counterElemTelescopes.textContent = String(++counterTelescopes);
-  }
-});
-/*
-// Research Centers Upgrade
-buttonResearchCenters.addEventListener("click", () => {
-  if (counterStars >= costResearchCenters) {
-    autoclickIncrement += incrementResearchCenters;
+      if (upgrade.upgradeKind === "auto") { // for autoclicker upgrades
+        autoclickIncrement += upgrade.rate;
+        upgrade.setCost = upgrade.cost * 1.5;
+      } else if (upgrade.upgradeKind === "manual") { // for mouse clicker upgrades
+        clickIncrement += upgrade.rate;
+        upgrade.rateElem.textContent = clickIncrement.toFixed(2);
+        upgrade.setCost = upgrade.cost * 1.2;
+      }
 
-    counterStars -= costResearchCenters;
-    counterElemStars.textContent = String(Math.round(counterStars));
-
-    costResearchCenters *= 1.1;
-    costElemResearchCenters.textContent = String(
-      Math.round(costResearchCenters),
-    );
-    counterElemResearchCenters.textContent = String(++counterResearchCenters);
-  }
-});
-
-// Space Stations Upgrade
-buttonSpaceStations.addEventListener("click", () => {
-  if (counterStars >= costSpaceStations) {
-    autoclickIncrement += incrementSpaceStations;
-
-    counterStars -= costSpaceStations;
-    counterElemStars.textContent = String(Math.round(counterStars));
-
-    costSpaceStations *= 1.2;
-    costElemSpaceStations.textContent = String(Math.round(costSpaceStations));
-    counterElemSpaceStations.textContent = String(++counterSpaceStations);
-  }
-});
-*/
-for (const item of availableItems) {
-  item.buttonElem.addEventListener("click", () => {
-    if (counterStars >= item.cost) {
-      console.log(item);
-      autoclickIncrement += item.rate;
-
-      counterStars -= item.cost;
-      item.counterElem.textContent = String(counterStars);
-
-      item.setCost = item.cost * 1.2;
-      item.costElem.textContent = String(item.cost);
-      item.counterElem.textContent = String(++item.counter);
+      upgrade.costElem.textContent = upgrade.cost.toFixed(2);
+      upgrade.counterElem.textContent = String(++upgrade.counter);
     }
   });
 }
-// Warp Portals Upgrade
-buttonWarpPortals.addEventListener("click", () => {
-  if (counterStars >= costWarpPortals) {
-    autoclickIncrement += incrementWarpPortals;
-
-    counterStars -= costWarpPortals;
-    counterElemStars.textContent = String(Math.round(counterStars));
-
-    costWarpPortals *= 1.2;
-    costElemWarpPortals.textContent = String(Math.round(costWarpPortals));
-    counterElemWarpPortals.textContent = String(++counterWarpPortals);
-  }
-});
 
 /* **** **** **** ****
  * AUTOCLICKER
  * **** **** **** ****/
-
 let lastFrameTimeMs: number = 0;
 let timeAccumulator: number = 0;
 
@@ -271,7 +173,7 @@ function autoclick(timestamp: number) {
     timeAccumulator -= autoclickDelay;
   }
 
-  counterElemStars.textContent = String(Math.round(counterStars));
+  counterElemStars.textContent = counterStars.toFixed(2);
   incrementElemStars.textContent = autoclickIncrement.toFixed(2);
 
   requestAnimationFrame(autoclick);
