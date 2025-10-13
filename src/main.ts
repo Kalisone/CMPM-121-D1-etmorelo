@@ -1,5 +1,8 @@
 import "./style.css";
 
+/* **** **** **** ****
+ * HTML DOCUMENT
+ * **** **** **** ****/
 document.body.innerHTML = `
   <h1>Starfinder</h1>
   <hr>
@@ -32,6 +35,10 @@ document.body.innerHTML = `
   <br>
 `;
 
+/* **** **** **** ****
+ * VARIABLES
+ * **** **** **** ****/
+
 let counterStars: number = 0;
 
 let counterTelescopes: number = 0;
@@ -54,12 +61,16 @@ let clickIncrement: number = 1;
 let autoclickDelay: number = 1000;
 let autoclickIncrement: number = 1;
 
-// BUTTONS
+/* **** **** **** ****
+ * BUTTONS
+ * **** **** **** ****/
 
+// Stars
 const buttonStars = document.getElementById("incrementID")!;
 const counterElemStars = document.getElementById("counterStarsID")!;
 const incrementElemStars = document.getElementById("incrementStarsID")!;
 
+// Telescopes Upgrade
 const buttonTelescopes = document.getElementById("buttonTelescopesID")!;
 const costElemTelescopes = document.getElementById("costTelescopesID")!;
 const counterElemTelescopes = document.getElementById("counterTelescopesID")!;
@@ -67,6 +78,7 @@ const incrementElemTelescopes = document.getElementById(
   "incrementTelescopesID",
 )!;
 
+// Research Centers Upgrade
 const buttonResearchCenters = document.getElementById(
   "buttonResearchCentersID",
 )!;
@@ -80,6 +92,7 @@ const incrementElemResearchCenters = document.getElementById(
   "incrementResearchCentersID",
 )!;
 
+// Space Stations Upgrade
 const buttonSpaceStations = document.getElementById("buttonSpaceStationsID")!;
 const costElemSpaceStations = document.getElementById("costSpaceStationsID")!;
 const counterElemSpaceStations = document.getElementById(
@@ -89,6 +102,7 @@ const incrementElemSpaceStations = document.getElementById(
   "incrementSpaceStationsID",
 )!;
 
+// Warp Portals Upgrade
 const buttonWarpPortals = document.getElementById("buttonWarpPortalsID")!;
 const costElemWarpPortals = document.getElementById("costWarpPortalsID")!;
 const counterElemWarpPortals = document.getElementById("counterWarpPortalsID")!;
@@ -96,6 +110,9 @@ const incrementElemWarpPortals = document.getElementById(
   "incrementWarpPortalsID",
 )!;
 
+/* **** **** **** ****
+ * INITIALIZE COSTS OF UPGRADES
+ * **** **** **** ****/
 costElemTelescopes.textContent = String(costTelescopes);
 
 costElemResearchCenters.textContent = String(costResearchCenters);
@@ -107,13 +124,17 @@ incrementElemSpaceStations.textContent = String(incrementSpaceStations);
 costElemWarpPortals.textContent = String(costWarpPortals);
 incrementElemWarpPortals.textContent = String(incrementWarpPortals);
 
-// Click Listener for Star Button
+/* **** **** **** ****
+ * CLICK LISTENERS FOR BUTTONS
+ * **** **** **** ****/
+
+// Stars
 buttonStars.addEventListener("click", () => {
   counterStars += clickIncrement;
   counterElemStars.textContent = String(Math.round(counterStars));
 });
 
-// Click Listener for Telescope Upgrade Button
+// Telescopes Upgrade
 buttonTelescopes.addEventListener("click", () => {
   if (counterStars >= costTelescopes) {
     incrementElemTelescopes.textContent = String(++clickIncrement);
@@ -127,7 +148,7 @@ buttonTelescopes.addEventListener("click", () => {
   }
 });
 
-// Click Listener for Research Center Upgrade Button
+// Research Centers Upgrade
 buttonResearchCenters.addEventListener("click", () => {
   if (counterStars >= costResearchCenters) {
     autoclickIncrement += incrementResearchCenters;
@@ -143,7 +164,7 @@ buttonResearchCenters.addEventListener("click", () => {
   }
 });
 
-// Click Listener for Space Stations Upgrade Button
+// Space Stations Upgrade
 buttonSpaceStations.addEventListener("click", () => {
   if (counterStars >= costSpaceStations) {
     autoclickIncrement += incrementSpaceStations;
@@ -157,7 +178,7 @@ buttonSpaceStations.addEventListener("click", () => {
   }
 });
 
-// Click Listener for Warp Portals Upgrade Button
+// Warp Portals Upgrade
 buttonWarpPortals.addEventListener("click", () => {
   if (counterStars >= costWarpPortals) {
     autoclickIncrement += incrementWarpPortals;
@@ -171,7 +192,9 @@ buttonWarpPortals.addEventListener("click", () => {
   }
 });
 
-// AUTOCLICKER
+/* **** **** **** ****
+ * AUTOCLICKER
+ * **** **** **** ****/
 
 let lastFrameTimeMs: number = 0;
 let timeAccumulator: number = 0;
