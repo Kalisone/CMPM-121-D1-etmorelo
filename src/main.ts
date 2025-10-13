@@ -35,6 +35,40 @@ document.body.innerHTML = `
   <br>
 `;
 
+interface Item {
+  name: string;
+  cost: number;
+  rate: number;
+  counter: number;
+  buttonElem: HTMLElement;
+  costElem: HTMLElement;
+  counterElem: HTMLElement;
+  rateElem: HTMLElement;
+}
+
+const availableItems: Item[] = [
+  {
+    name: "Research Center",
+    cost: 10,
+    rate: 0.1,
+    counter: 0,
+    buttonElem: document.getElementById("buttonResearchCentersID")!,
+    costElem: document.getElementById("costResearchCentersID")!,
+    counterElem: document.getElementById("counterResearchCentersID")!,
+    rateElem: document.getElementById("incrementResearchCentersID")!,
+  },
+  {
+    name: "Space Station",
+    cost: 100,
+    rate: 2.0,
+    counter: 0,
+    buttonElem: document.getElementById("buttonSpaceStationsID")!,
+    costElem: document.getElementById("costSpaceStationsID")!,
+    counterElem: document.getElementById("counterSpaceStationsID")!,
+    rateElem: document.getElementById("incrementSpaceStationsID")!,
+  },
+];
+
 /* **** **** **** ****
  * VARIABLES
  * **** **** **** ****/
@@ -43,7 +77,7 @@ let counterStars: number = 0;
 
 let counterTelescopes: number = 0;
 let costTelescopes: number = 10;
-
+/*
 let counterResearchCenters: number = 0;
 let costResearchCenters: number = 10;
 const incrementResearchCenters = 0.1;
@@ -51,7 +85,7 @@ const incrementResearchCenters = 0.1;
 let counterSpaceStations: number = 0;
 let costSpaceStations: number = 100;
 const incrementSpaceStations = 2.0;
-
+*/
 let counterWarpPortals: number = 0;
 let costWarpPortals: number = 1000;
 const incrementWarpPortals = 50.0;
@@ -77,7 +111,7 @@ const counterElemTelescopes = document.getElementById("counterTelescopesID")!;
 const incrementElemTelescopes = document.getElementById(
   "incrementTelescopesID",
 )!;
-
+/*
 // Research Centers Upgrade
 const buttonResearchCenters = document.getElementById(
   "buttonResearchCentersID",
@@ -101,7 +135,7 @@ const counterElemSpaceStations = document.getElementById(
 const incrementElemSpaceStations = document.getElementById(
   "incrementSpaceStationsID",
 )!;
-
+*/
 // Warp Portals Upgrade
 const buttonWarpPortals = document.getElementById("buttonWarpPortalsID")!;
 const costElemWarpPortals = document.getElementById("costWarpPortalsID")!;
@@ -114,15 +148,20 @@ const incrementElemWarpPortals = document.getElementById(
  * INITIALIZE COSTS OF UPGRADES
  * **** **** **** ****/
 costElemTelescopes.textContent = String(costTelescopes);
-
+/*
 costElemResearchCenters.textContent = String(costResearchCenters);
 incrementElemResearchCenters.textContent = String(incrementResearchCenters);
 
 costElemSpaceStations.textContent = String(costSpaceStations);
 incrementElemSpaceStations.textContent = String(incrementSpaceStations);
-
+*/
 costElemWarpPortals.textContent = String(costWarpPortals);
 incrementElemWarpPortals.textContent = String(incrementWarpPortals);
+
+for (const item of availableItems) {
+  item.costElem.textContent = String(item.cost);
+  item.rateElem.textContent = String(item.rate);
+}
 
 /* **** **** **** ****
  * CLICK LISTENERS FOR BUTTONS
@@ -147,7 +186,7 @@ buttonTelescopes.addEventListener("click", () => {
     counterElemTelescopes.textContent = String(++counterTelescopes);
   }
 });
-
+/*
 // Research Centers Upgrade
 buttonResearchCenters.addEventListener("click", () => {
   if (counterStars >= costResearchCenters) {
@@ -177,7 +216,19 @@ buttonSpaceStations.addEventListener("click", () => {
     counterElemSpaceStations.textContent = String(++counterSpaceStations);
   }
 });
+*/
+for (const item of availableItems) {
+  if (counterStars >= item.cost) {
+    autoclickIncrement += item.rate;
 
+    counterStars -= item.cost;
+    item.counterElem.textContent = String(counterStars);
+
+    item.cost *= 1.2;
+    item.costElem.textContent = String(item.cost);
+    item.counterElem.textContent = String(++item.counter);
+  }
+}
 // Warp Portals Upgrade
 buttonWarpPortals.addEventListener("click", () => {
   if (counterStars >= costWarpPortals) {
