@@ -1,3 +1,11 @@
+/*
+ * Demo 1: Incremental Game Development
+ * Ethan Morelos
+ * etmorelo
+ * CMPM 121 - Game Development Patterns
+ *
+ * Demos an incremental game, similar to Cookie Clicker, for the purposes of practicing incremental development of a program.
+ */
 import "./style.css";
 
 /* **** **** **** ****
@@ -17,7 +25,11 @@ document.body.innerHTML = `
 
 /* **** **** **** ****
  * UPGRADES
+ *
+ * Upgrade class, array of upgrades
  * **** **** **** ****/
+
+// Upgrade Class: Implements upgrades for the game. Supports upgrades for autoclicker and manual (cursor) clicker. Includes DOM elements to display on document.
 class Upgrade {
   // PRIVATE PROPERTIES
   private amount = 0;
@@ -115,6 +127,7 @@ class Upgrade {
   }
 }
 
+// Upgrade Array: Available upgrades. First upgrade is a manual (cursor) upgrade, all others are autoclicker upgrades.
 const availableUpgrades: Upgrade[] = [
   new Upgrade(
     "Telescope",
@@ -161,7 +174,7 @@ const availableUpgrades: Upgrade[] = [
 ];
 
 /* **** **** **** ****
- * VARIABLES
+ * GLOBAL VARIABLES
  * **** **** **** ****/
 let counterStars: number = 0;
 let clickIncrement: number = 1;
@@ -179,17 +192,21 @@ const incrementElemStars = document.getElementById("incrementStarsID")!;
 /* **** **** **** ****
  * CLICK LISTENERS FOR BUTTONS
  * **** **** **** ****/
-// Stars
+
+// Stars Listener: Specific click listener for main action button. Clicking this button increments stars.
 buttonStars.addEventListener("click", () => {
   counterStars += clickIncrement;
   counterElemStars.textContent = counterStars.toFixed(2);
 });
 
+// Upgrades Listener: Adds available upgrades to document and adds buttons & click listeners to each upgrade.
 for (const upgrade of availableUpgrades) {
+  // Add upgrade information to document
   document.body.append(upgrade.DivDesc);
   document.body.append(upgrade.DivAmount);
   document.body.append(upgrade.DivRate);
 
+  // Button for buying upgrade
   const button = document.createElement("button");
   button.innerHTML = `Buy ${upgrade.Name}: ${upgrade.Cost} stars`;
   document.body.append(button);
@@ -199,6 +216,7 @@ for (const upgrade of availableUpgrades) {
     document.createElement("br"),
   );
 
+  // Click listener for upgrade button. Upgrade cost progression: autoclicker=1.5x, manual=1.2x.
   button.addEventListener("click", () => {
     if (counterStars >= upgrade.Cost) {
       counterStars -= upgrade.Cost;
@@ -220,22 +238,27 @@ for (const upgrade of availableUpgrades) {
 
 /* **** **** **** ****
  * AUTOCLICKER
+ *
+ * Autoclick function & related variables
  * **** **** **** ****/
 let lastFrameTimeMs: number = 0;
 let timeAccumulator: number = 0;
 
-// Autoclicker increments counter by (1) star(s)
+// Autoclicker increments counter by (1) star(s). Accounts for framerate differences.
 function autoclick(timestamp: number) {
+  // Calculate elapsed time
   const delta = timestamp - lastFrameTimeMs;
   lastFrameTimeMs = timestamp;
   timeAccumulator += delta;
 
+  // Trigger autoclicking action. Adds stars & resets time accumulation.
   while (timeAccumulator >= autoclickDelay) {
     counterStars += autoclickIncrement;
 
     timeAccumulator -= autoclickDelay;
   }
 
+  // Update DOM elements
   counterElemStars.textContent = counterStars.toFixed(2);
   incrementElemStars.textContent = autoclickIncrement.toFixed(2);
 
