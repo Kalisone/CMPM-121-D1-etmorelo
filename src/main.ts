@@ -19,52 +19,29 @@ document.body.innerHTML = `
  * UPGRADES
  * **** **** **** ****/
 class Upgrade {
-  private name: string;
-  private upgradeKind: string;
-  private description: string;
-  private cost: number;
-  private rate: number;
+  // PRIVATE PROPERTIES
   private amount = 0;
-  private divDesc = document.createElement("div");
-  private divAmount = document.createElement("div");
-  private divRate = document.createElement("div");
+
+  // DOM Elements
+  private readonly divDesc = document.createElement("div");
+  private readonly divAmount = document.createElement("div");
+  private readonly divRate = document.createElement("div");
 
   constructor(
-    name: string,
-    upgradeKind: string,
-    description: string,
-    cost: number,
-    rate: number,
+    private readonly name: string,
+    private upgradeKind: string,
+    private description: string,
+    private cost: number,
+    private rate: number,
   ) {
-    this.name = name;
-    this.upgradeKind = upgradeKind;
-    this.description = description;
-    this.cost = cost;
-    this.rate = rate;
     this.updateDescription();
     this.updateAmount();
     this.updateRate();
   }
 
-  updateDescription() {
-    this.divDesc.textContent =
-      `[${this.name.toUpperCase()}] ${this.description}`;
-  }
-
-  updateAmount() {
-    this.divAmount.textContent = `Number of ${this.name}s: ${this.amount}`;
-  }
-
-  updateRate(rate?: number) {
-    this.divRate.textContent = `+${(rate ? rate : this.Rate)} stars/sec`;
-  }
-
+  // GETTERS & SETTERS
   get Name() {
     return this.name;
-  }
-
-  set Name(name: string) {
-    this.name = name;
   }
 
   get UpgradeKind() {
@@ -81,6 +58,7 @@ class Upgrade {
 
   set Description(description: string) {
     this.description = description;
+    this.updateDescription();
   }
 
   get Cost() {
@@ -97,6 +75,7 @@ class Upgrade {
 
   set Rate(rate: number) {
     this.rate = rate;
+    this.updateRate();
   }
 
   get Amount() {
@@ -105,18 +84,34 @@ class Upgrade {
 
   set Amount(amount: number) {
     this.amount = amount;
+    this.updateAmount();
   }
 
+  // DOM GETTERS
   get DivDesc() {
     return this.divDesc;
   }
 
-  get DivCounter() {
+  get DivAmount() {
     return this.divAmount;
   }
 
   get DivRate() {
     return this.divRate;
+  }
+
+  // PRIVATE UI UPDATE METHODS
+  private updateDescription() {
+    this.divDesc.textContent =
+      `[${this.name.toUpperCase()}] ${this.description}`;
+  }
+
+  private updateAmount() {
+    this.divAmount.textContent = `Number of ${this.name}s: ${this.amount}`;
+  }
+
+  private updateRate(rate?: number) {
+    this.divRate.textContent = `+${(rate ? rate : this.Rate)} stars/sec`;
   }
 }
 
@@ -192,7 +187,7 @@ buttonStars.addEventListener("click", () => {
 
 for (const upgrade of availableUpgrades) {
   document.body.append(upgrade.DivDesc);
-  document.body.append(upgrade.DivCounter);
+  document.body.append(upgrade.DivAmount);
   document.body.append(upgrade.DivRate);
 
   const button = document.createElement("button");
@@ -216,11 +211,8 @@ for (const upgrade of availableUpgrades) {
         clickIncrement += upgrade.Rate;
         upgrade.Rate = upgrade.Rate + 1;
         upgrade.Cost = upgrade.Cost * 1.2;
-
-        upgrade.updateRate();
       }
 
-      upgrade.updateAmount();
       button.innerHTML = `Buy ${upgrade.Name}: ${upgrade.Cost} stars`;
     }
   });
