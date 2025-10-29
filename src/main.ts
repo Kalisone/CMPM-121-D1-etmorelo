@@ -205,10 +205,6 @@ for (const upgrade of availableUpgrades) {
   );
 
   button.addEventListener("click", () => {
-    console.log(upgrade.DivDesc);
-    console.log(upgrade.DivCounter);
-    console.log(upgrade.DivRate);
-
     if (counterStars >= upgrade.Cost) {
       counterStars -= upgrade.Cost;
       upgrade.Amount = upgrade.Amount + 1;
