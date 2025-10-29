@@ -13,64 +13,110 @@ document.body.innerHTML = `
   <div>You have <span id="counterStarsID">0</span> stars!</div>
   <div>Getting <span id="incrementStarsID">1.00</span> stars per second.</div>
   <br>
-
-  <div><span id="descTelescopesID"></span><div>
-  <div>Number of Telescopes: <span id="counterTelescopesID">0</span></div>
-  <div>+<span id="incrementTelescopesID">1</span> stars/click</div>
-  <button id="buttonTelescopesID">Buy Telescope: <span id="costTelescopesID">X</span> stars</button>
-  <br><br>
-  
-  <div><span id="descResearchCentersID"></span><div>
-  <div>Number of Research Centers: <span id="counterResearchCentersID">0</span></div>
-  <div>+<span id="incrementResearchCentersID">X</span> stars/sec</div>
-  <button id="buttonResearchCentersID">Buy Research Center: <span id="costResearchCentersID">X</span> stars</button>
-  <br><br>
-
-  <div><span id="descSpaceStationsID"></span><div>
-  <div>Number of Space Stations: <span id="counterSpaceStationsID">0</span></div>
-  <div>+<span id="incrementSpaceStationsID">X</span> stars/sec</div>
-  <button id="buttonSpaceStationsID">Buy Space Station: <span id="costSpaceStationsID">X</span> stars</button>
-  <br><br>
-
-  <div><span id="descWarpPortalsID"></span><div>
-  <div>Number of Warp Portals: <span id="counterWarpPortalsID">0</span></div>
-  <div>+<span id="incrementWarpPortalsID">X</span> stars/sec</div>
-  <button id="buttonWarpPortalsID">Buy Warp Portal: <span id="costWarpPortalsID">X</span> stars</button>
-  <br><br>
-
-  <div><span id="descVoidsEyesID"></span><div>
-  <div>Number of Void's Eyes: <span id="counterVoidsEyesID">0</span></div>
-  <div>+<span id="incrementVoidsEyesID">X</span> stars/sec</div>
-  <button id="buttonVoidsEyesID">Buy Void's Eye: <span id="costVoidsEyesID">X</span> stars</button>
-  <br><br>
-  
-  <div><span id="descStarmakersID"></span><div>
-  <div>Number of Starmakers: <span id="counterStarmakersID">0</span></div>
-  <div>+<span id="incrementStarmakersID">X</span> stars/sec</div>
-  <button id="buttonStarmakersID">Buy Starmaker: <span id="costStarmakersID">X</span> stars</button>
-  <br><br>
 `;
 
 /* **** **** **** ****
  * UPGRADES
  * **** **** **** ****/
 class Upgrade {
-  constructor(
-    public name: string,
-    public upgradeKind: string,
-    public description: string,
-    public cost: number,
-    public rate: number,
-    public counter: number,
-    public buttonElem: HTMLElement,
-    public descElem: HTMLElement,
-    public costElem: HTMLElement,
-    public counterElem: HTMLElement,
-    public rateElem: HTMLElement,
-  ) {}
+  private name: string;
+  private upgradeKind: string;
+  private description: string;
+  private cost: number;
+  private rate: number;
+  private amount = 0;
+  private divDesc = document.createElement("div");
+  private divAmount = document.createElement("div");
+  private divRate = document.createElement("div");
 
-  set setCost(newCost: number) {
-    this.cost = newCost;
+  constructor(
+    name: string,
+    upgradeKind: string,
+    description: string,
+    cost: number,
+    rate: number,
+  ) {
+    this.name = name;
+    this.upgradeKind = upgradeKind;
+    this.description = description;
+    this.cost = cost;
+    this.rate = rate;
+    this.updateDescription();
+    this.updateAmount();
+    this.updateRate();
+  }
+
+  updateDescription() {
+    this.divDesc.textContent =
+      `[${this.name.toUpperCase()}] ${this.description}`;
+  }
+
+  updateAmount() {
+    this.divAmount.textContent = `Number of ${this.name}s: ${this.amount}`;
+  }
+
+  updateRate(rate?: number) {
+    this.divRate.textContent = `+${(rate ? rate : this.Rate)} stars/sec`;
+  }
+
+  get Name() {
+    return this.name;
+  }
+
+  set Name(name: string) {
+    this.name = name;
+  }
+
+  get UpgradeKind() {
+    return this.upgradeKind;
+  }
+
+  set UpgradeKind(upgradeKind: string) {
+    this.upgradeKind = upgradeKind;
+  }
+
+  get Description() {
+    return this.description;
+  }
+
+  set Description(description: string) {
+    this.description = description;
+  }
+
+  get Cost() {
+    return this.cost;
+  }
+
+  set Cost(cost: number) {
+    this.cost = cost;
+  }
+
+  get Rate() {
+    return this.rate;
+  }
+
+  set Rate(rate: number) {
+    this.rate = rate;
+  }
+
+  get Amount() {
+    return this.amount;
+  }
+
+  set Amount(amount: number) {
+    this.amount = amount;
+  }
+
+  get DivDesc() {
+    return this.divDesc;
+  }
+
+  get DivCounter() {
+    return this.divAmount;
+  }
+
+  get DivRate() {
+    return this.divRate;
   }
 }
 
@@ -81,12 +127,6 @@ const availableUpgrades: Upgrade[] = [
     "Each telescope must be manually operated by interns and graduate students to find stars.",
     10,
     1,
-    0,
-    document.getElementById("buttonTelescopesID")!,
-    document.getElementById("descTelescopesID")!,
-    document.getElementById("costTelescopesID")!,
-    document.getElementById("counterTelescopesID")!,
-    document.getElementById("incrementTelescopesID")!,
   ),
   new Upgrade(
     "Research Center",
@@ -94,12 +134,6 @@ const availableUpgrades: Upgrade[] = [
     "Research centers are fully funded by taxing the trade of tears of engineering students :)",
     10,
     0.1,
-    0,
-    document.getElementById("buttonResearchCentersID")!,
-    document.getElementById("descResearchCentersID")!,
-    document.getElementById("costResearchCentersID")!,
-    document.getElementById("counterResearchCentersID")!,
-    document.getElementById("incrementResearchCentersID")!,
   ),
   new Upgrade(
     "Space Station",
@@ -107,25 +141,13 @@ const availableUpgrades: Upgrade[] = [
     "Powered by dying stars.",
     100,
     2.0,
-    0,
-    document.getElementById("buttonSpaceStationsID")!,
-    document.getElementById("descSpaceStationsID")!,
-    document.getElementById("costSpaceStationsID")!,
-    document.getElementById("counterSpaceStationsID")!,
-    document.getElementById("incrementSpaceStationsID")!,
   ),
   new Upgrade(
-    "Warp Portals",
+    "Warp Portal",
     "auto",
     "Travel to distant systems to discover new stars!",
     1000,
     50.0,
-    0,
-    document.getElementById("buttonWarpPortalsID")!,
-    document.getElementById("descWarpPortalsID")!,
-    document.getElementById("costWarpPortalsID")!,
-    document.getElementById("counterWarpPortalsID")!,
-    document.getElementById("incrementWarpPortalsID")!,
   ),
   new Upgrade(
     "Void's Eye",
@@ -133,12 +155,6 @@ const availableUpgrades: Upgrade[] = [
     "Search for new stars in galaxies lightmillenia away.",
     10000,
     500.0,
-    0,
-    document.getElementById("buttonVoidsEyesID")!,
-    document.getElementById("descVoidsEyesID")!,
-    document.getElementById("costVoidsEyesID")!,
-    document.getElementById("counterVoidsEyesID")!,
-    document.getElementById("incrementVoidsEyesID")!,
   ),
   new Upgrade(
     "Starmaker",
@@ -146,12 +162,6 @@ const availableUpgrades: Upgrade[] = [
     "Synthesize your own stars with this technomagical apparatus. Components must be lubricated with human spinal fluid.",
     500000,
     10000.0,
-    0,
-    document.getElementById("buttonStarmakersID")!,
-    document.getElementById("descStarmakersID")!,
-    document.getElementById("costStarmakersID")!,
-    document.getElementById("counterStarmakersID")!,
-    document.getElementById("incrementStarmakersID")!,
   ),
 ];
 
@@ -180,31 +190,42 @@ buttonStars.addEventListener("click", () => {
   counterElemStars.textContent = counterStars.toFixed(2);
 });
 
-// Upgrades
 for (const upgrade of availableUpgrades) {
-  // Initialize upgrade elements
-  upgrade.descElem.textContent =
-    `[${upgrade.name.toUpperCase()}] ${upgrade.description}`;
-  upgrade.costElem.textContent = String(upgrade.cost);
-  upgrade.rateElem.textContent = String(upgrade.rate);
+  document.body.append(upgrade.DivDesc);
+  document.body.append(upgrade.DivCounter);
+  document.body.append(upgrade.DivRate);
 
-  // Click listener
-  upgrade.buttonElem.addEventListener("click", () => {
-    if (counterStars >= upgrade.cost) {
-      counterStars -= upgrade.cost;
-      upgrade.counterElem.textContent = counterStars.toFixed(2);
+  const button = document.createElement("button");
+  button.innerHTML = `Buy ${upgrade.Name}: ${upgrade.Cost} stars`;
+  document.body.append(button);
 
-      if (upgrade.upgradeKind === "auto") { // for autoclicker upgrades
-        autoclickIncrement += upgrade.rate;
-        upgrade.setCost = upgrade.cost * 1.5;
-      } else if (upgrade.upgradeKind === "manual") { // for mouse clicker upgrades
-        clickIncrement += upgrade.rate;
-        upgrade.rateElem.textContent = clickIncrement.toFixed(2);
-        upgrade.setCost = upgrade.cost * 1.2;
+  document.body.append(
+    document.createElement("br"),
+    document.createElement("br"),
+  );
+
+  button.addEventListener("click", () => {
+    console.log(upgrade.DivDesc);
+    console.log(upgrade.DivCounter);
+    console.log(upgrade.DivRate);
+
+    if (counterStars >= upgrade.Cost) {
+      counterStars -= upgrade.Cost;
+      upgrade.Amount = upgrade.Amount + 1;
+
+      if (upgrade.UpgradeKind === "auto") { // autoclicker upgrades
+        upgrade.Cost = upgrade.Cost * 1.5;
+        autoclickIncrement += upgrade.Rate;
+      } else if (upgrade.UpgradeKind === "manual") { // mouse clicker upgrade
+        clickIncrement += upgrade.Rate;
+        upgrade.Rate = upgrade.Rate + 1;
+        upgrade.Cost = upgrade.Cost * 1.2;
+
+        upgrade.updateRate();
       }
 
-      upgrade.costElem.textContent = upgrade.cost.toFixed(2);
-      upgrade.counterElem.textContent = String(++upgrade.counter);
+      upgrade.updateAmount();
+      button.innerHTML = `Buy ${upgrade.Name}: ${upgrade.Cost} stars`;
     }
   });
 }
