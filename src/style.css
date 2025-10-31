@@ -6,7 +6,7 @@
 
 /* Thematic background inspired by inyoo403, rahebgames */
 body {
-  background-image: url(/assets/purple-nebula-8.png);
+  background-image: url(../assets/purple-nebula-8.png);
   color: white;
   font-family: "Monaco", monospace;
 }
@@ -163,7 +163,7 @@ div[class*="box"] {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url(./assets/star-twinkling.png);
+  background-image: url(../assets/star-twinkling.png);
   background-size: cover;
   background-position: center;
   mix-blend-mode: screen;
