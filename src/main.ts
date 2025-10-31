@@ -123,7 +123,9 @@ class Upgrade {
   }
 
   private updateRate(rate?: number) {
-    this.divRate.textContent = `+${(rate ? rate : this.Rate)} stars/sec`;
+    rate = rate ? rate : this.Rate;
+    const rateKind = this.upgradeKind === "manual" ? "click" : "sec";
+    this.divRate.textContent = `+${rate} stars/${rateKind}`;
   }
 }
 
