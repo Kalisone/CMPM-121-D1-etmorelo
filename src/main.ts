@@ -4,7 +4,7 @@
  * etmorelo
  * CMPM 121 - Game Development Patterns
  *
- * Demos an incremental game, similar to Cookie Clicker, for the purposes of practicing incremental development of a program.
+ * Demos a basic clicker game for the purposes of practicing incremental development of a program.
  */
 import "./style.css";
 
@@ -15,12 +15,21 @@ document.body.innerHTML = `
   <h1>Starfinder</h1>
   <hr>
 
-  <button id="incrementID">⭐</button>
-  <br><br>
+  <div class="game">
+    <main class="main">
 
-  <div>You have <span id="counterStarsID">0</span> stars!</div>
-  <div>Getting <span id="incrementStarsID">1.00</span> stars per second.</div>
-  <br>
+      <div class="rgb-container" id="rgb-rotatable-container">
+        <button id="incrementID"><img src="assets/star_twinkling.png" alt="RGB Split Image"></button>
+      </div>
+      <br><br>
+
+      <div>You have <span id="counterStarsID">0</span> stars!</div>
+      <div>Getting <span id="incrementStarsID">1.00</span> stars per second.</div>
+      <br>
+    </main>
+
+    <aside class="upgradeBar"></aside>
+  </div>
 `;
 
 /* **** **** **** ****
@@ -28,7 +37,6 @@ document.body.innerHTML = `
  *
  * Upgrade class, array of upgrades
  * **** **** **** ****/
-
 // Upgrade Class: Implements upgrades for the game. Supports upgrades for autoclicker and manual (cursor) clicker. Includes DOM elements to display on document.
 class Upgrade {
   // PRIVATE PROPERTIES
@@ -119,13 +127,15 @@ class Upgrade {
   }
 
   private updateAmount() {
-    this.divAmount.textContent = `Number of ${this.name}s: ${this.amount}`;
+    this.divAmount.textContent = `Number of ${this.name}s: ${
+      numFormat(this.amount)
+    }`;
   }
 
   private updateRate(rate?: number) {
     rate = rate ? rate : this.Rate;
     const rateKind = this.upgradeKind === "manual" ? "click" : "sec";
-    this.divRate.textContent = `+${rate} stars/${rateKind}`;
+    this.divRate.textContent = `+${numFormat(rate)} stars/${rateKind}`;
   }
 }
 
@@ -134,7 +144,7 @@ const availableUpgrades: Upgrade[] = [
   new Upgrade(
     "Telescope",
     "manual",
-    "Each telescope must be manually operated by interns and graduate students to find stars.",
+    "Each telescope must be manually operated by unpaid interns and overworked graduate students to find stars.",
     10,
     1,
   ),
@@ -155,7 +165,7 @@ const availableUpgrades: Upgrade[] = [
   new Upgrade(
     "Warp Portal",
     "auto",
-    "Travel to distant systems to discover new stars!",
+    "Travel to distant systems to discover new stars! Survival of Warptravel is not guaranteed. Warp insurance does not cover encounters with daemonic entities.",
     1000,
     50.0,
   ),
@@ -178,42 +188,55 @@ const availableUpgrades: Upgrade[] = [
 /* **** **** **** ****
  * GLOBAL VARIABLES
  * **** **** **** ****/
+// Button sounds inspired by rahebgames
+const starChime = new Audio("assets/powerUp8.ogg");
+const upgradeChime = new Audio("assets/zapThreeToneUp.ogg");
+const autoclickDelay: number = 1000;
 let counterStars: number = 0;
 let clickIncrement: number = 1;
-// deno-lint-ignore prefer-const
-let autoclickDelay: number = 1000;
 let autoclickIncrement: number = 1;
 
 /* **** **** **** ****
  * INITIALIZE STAR ELEMENTS
  * **** **** **** ****/
 const buttonStars = document.getElementById("incrementID")!;
+const rgbContainer = document.getElementById("rgb-rotatable-container")!;
+buttonStars.classList.add("buttonStar");
 const counterElemStars = document.getElementById("counterStarsID")!;
 const incrementElemStars = document.getElementById("incrementStarsID")!;
+const upgradeBar = document.querySelector(".upgradeBar") as HTMLElement;
 
 /* **** **** **** ****
  * CLICK LISTENERS FOR BUTTONS
  * **** **** **** ****/
-
 // Stars Listener: Specific click listener for main action button. Clicking this button increments stars.
 buttonStars.addEventListener("click", () => {
+  starChime.play();
+  rgbContainer.classList.add("rotate-fast");
+
   counterStars += clickIncrement;
-  counterElemStars.textContent = counterStars.toFixed(2);
+  counterElemStars.textContent = String(numFormat(counterStars));
+
+  setTimeout(() => {
+    rgbContainer.classList.remove("rotate-fast");
+  }, 200);
 });
 
 // Upgrades Listener: Adds available upgrades to document and adds buttons & click listeners to each upgrade.
 for (const upgrade of availableUpgrades) {
   // Add upgrade information to document
-  document.body.append(upgrade.DivDesc);
-  document.body.append(upgrade.DivAmount);
-  document.body.append(upgrade.DivRate);
+  upgradeBar.append(upgrade.DivDesc);
+  upgradeBar.append(upgrade.DivAmount);
+  upgradeBar.append(upgrade.DivRate);
 
   // Button for buying upgrade
-  const button = document.createElement("button");
+  const button = document.createElement("div");
   button.innerHTML = `Buy ${upgrade.Name}: ${upgrade.Cost} stars`;
-  document.body.append(button);
+  button.classList.add("box");
+  button.classList.add("buttonUpgrade");
+  upgradeBar.append(button);
 
-  document.body.append(
+  upgradeBar.append(
     document.createElement("br"),
     document.createElement("br"),
   );
@@ -221,6 +244,7 @@ for (const upgrade of availableUpgrades) {
   // Click listener for upgrade button. Upgrade cost progression: autoclicker=1.5x, manual=1.2x.
   button.addEventListener("click", () => {
     if (counterStars >= upgrade.Cost) {
+      upgradeChime.play();
       counterStars -= upgrade.Cost;
       upgrade.Amount = upgrade.Amount + 1;
 
@@ -228,12 +252,14 @@ for (const upgrade of availableUpgrades) {
         upgrade.Cost = upgrade.Cost * 1.5;
         autoclickIncrement += upgrade.Rate;
       } else if (upgrade.UpgradeKind === "manual") { // mouse clicker upgrade
-        clickIncrement += upgrade.Rate;
         upgrade.Rate = upgrade.Rate + 1;
+        clickIncrement = upgrade.Rate;
         upgrade.Cost = upgrade.Cost * 1.2;
       }
 
-      button.innerHTML = `Buy ${upgrade.Name}: ${upgrade.Cost} stars`;
+      button.innerHTML = `Buy ${upgrade.Name}: ${
+        numFormat(upgrade.Cost)
+      } stars`;
     }
   });
 }
@@ -261,10 +287,17 @@ function autoclick(timestamp: number) {
   }
 
   // Update DOM elements
-  counterElemStars.textContent = counterStars.toFixed(2);
-  incrementElemStars.textContent = autoclickIncrement.toFixed(2);
+  counterElemStars.textContent = String(numFormat(counterStars));
+  incrementElemStars.textContent = String(numFormat(autoclickIncrement));
 
   requestAnimationFrame(autoclick);
 }
 
 requestAnimationFrame(autoclick);
+
+/* **** **** **** ****
+ * HELPER FUNCTIONS
+ * **** **** **** ****/
+function numFormat(n: number) {
+  return Math.round(n * 100) / 100;
+}

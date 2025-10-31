@@ -1,5 +1,202 @@
-.icon {
-  width: 64px;
-  vertical-align: top;
-  border: 1px solid salmon;
+/* Repos of demos that inspired UI changes
+ * https://github.com/inyoo403/D1.a
+ * https://github.com/Noah2271/cmpm-121-incremental-nbilledo
+ * https://github.com/rahebgames/cmpm-121-d1
+ */
+
+/* Thematic background inspired by inyoo403, rahebgames */
+body {
+  background-image: url(assets/Purple_Nebula_8-1024x1024.png);
+  color: white;
+  font-family: "Monaco", monospace;
+}
+
+h1 {
+  font-size: 36px;
+  font-family: "Papyrus", fantasy;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  -ms-user-drag: none;
+}
+
+/* Main button styling: https://www.scaler.com/topics/image-button-in-html/ */
+button {
+  font-size: 18px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.buttonStar {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: inherit;
+  appearance: none;
+  background-blend-mode: screen;
+}
+.buttonLink::hover {
+  animation-name: rgbAnim;
+  animation-duration: 6s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Button styling: https://codepen.io/natalia-reshetnikova/pen/oRRjPP */
+div[class*="box"] {
+  width: 50%;
+  min-width: 270px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  user-select: none;
+}
+
+/* Button animations inspired by Noah2271 */
+.buttonUpgrade {
+  line-height: 50px;
+  height: 50px;
+  text-align: center;
+  width: 250px;
+  cursor: pointer;
+  transition: all 0.5s;
+  position: relative;
+}
+.buttonUpgrade span {
+  z-index: 2;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.buttonUpgrade::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: all 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.buttonUpgrade::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: all 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.buttonUpgrade:hover::before {
+  transform: rotate(-45deg);
+  background-color: rgba(255, 255, 255, 0);
+}
+.buttonUpgrade:hover::after {
+  transform: rotate(45deg);
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 1rem;
+  flex: 1 1 auto;
+}
+
+/* Side bar for upgrades inspired by rahebgames */
+.upgradeBar {
+  width: 100%;
+  min-width: 300px;
+  background: #f7f7f8;
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  background-color: #2a2a2aaa;
+}
+
+/* RGB effect on main button from Gemini AI */
+.rgb-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  transition: transform 0.1s;
+}
+
+.rgb-container img {
+  position: relative;
+  z-index: 2;
+  mix-blend-mode: screen;
+  display: block;
+}
+
+.rgb-container::before,
+.rgb-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(assets/star_twinkling.png);
+  background-size: cover;
+  background-position: center;
+  mix-blend-mode: screen;
+  z-index: 1;
+  transform: translate(0, 0);
+  transition: transform 0.2s ease-out;
+}
+
+.rgb-container::before {
+  filter: sepia(100%) hue-rotate(0deg) saturate(300%) contrast(150%);
+}
+
+.rgb-container::after {
+  filter: sepia(100%) hue-rotate(180deg) saturate(300%) contrast(150%);
+}
+
+.rgb-container:hover::before {
+  transform: translate(-6px, 0);
+}
+
+.rgb-container:hover::after {
+  transform: translate(6px, 0);
+}
+
+@keyframes rotateAnim {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(720deg);
+  }
+}
+
+.rotate-fast {
+  animation: rotateAnim 0.2s linear forwards;
 }
