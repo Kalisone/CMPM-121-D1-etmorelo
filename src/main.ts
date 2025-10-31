@@ -19,7 +19,7 @@ document.body.innerHTML = `
     <main class="main">
 
       <div class="rgb-container" id="rgb-rotatable-container">
-        <button id="incrementID"><img src="assets/star_twinkling.png" alt="RGB Split Image"></button>
+        <button id="incrementID"><img src="/assets/star_twinkling.png" alt="RGB Split Image"></button>
       </div>
       <br><br>
 
@@ -189,8 +189,8 @@ const availableUpgrades: Upgrade[] = [
  * GLOBAL VARIABLES
  * **** **** **** ****/
 // Button sounds inspired by rahebgames
-const starChime = new Audio("assets/powerUp8.ogg");
-const upgradeChime = new Audio("assets/zapThreeToneUp.ogg");
+const starChime = new Audio("/assets/powerUp8.ogg");
+const upgradeChime = new Audio("/assets/zapThreeToneUp.ogg");
 const autoclickDelay: number = 1000;
 let counterStars: number = 0;
 let clickIncrement: number = 1;
